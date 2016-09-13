@@ -2,6 +2,8 @@ package com.app.rsouza.wifimanager;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
@@ -77,27 +79,36 @@ public class MainActivity extends AppCompatActivity {
                 WifiInfo wifiInfo;
                 wifiInfo = wifiManager.getConnectionInfo();
 
-                tvSSID.setText(wifiInfo.getSSID());
-                tvSinalLevel.setText(String.valueOf(((WifiManager.calculateSignalLevel(wifiInfo.getRssi(), 10) * 100) / 10)));
-                tvSpeed.setText(String.valueOf(wifiInfo.getLinkSpeed()));
-                tvFrequence.setText( String.valueOf(wifiInfo.getFrequency()));
-                tvNetworkId.setText( String.valueOf(wifiInfo.getNetworkId()));
+                ConnectivityManager connManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+                NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
 
-                for (final WifiConfiguration config : configuredWifis) {
-                    if (config.status == WifiConfiguration.Status.CURRENT) {
-                        switch (getSecurity(config)) {
-                            case SECURITY_PSK:
-                                tvSecurity.setText("PSK");
-                                break;
-                            case SECURITY_EAP:
-                                tvSecurity.setText("EAP");
-                                break;
-                            case SECURITY_WEP:
-                                tvSecurity.setText("WEP");
-                                break;
-                            case SECURITY_NONE:
-                                tvSecurity.setText("NONE");
-                                break;
+                if (!mWifi.isConnected()){
+                    Toast.makeText(getApplication(), "Please enable your wifi first.", Toast.LENGTH_LONG).show();
+                }
+                else
+                {
+                    tvSSID.setText(wifiInfo.getSSID());
+                    tvSinalLevel.setText(String.valueOf(((WifiManager.calculateSignalLevel(wifiInfo.getRssi(), 10) * 100) / 10)));
+                    tvSpeed.setText(String.valueOf(wifiInfo.getLinkSpeed()));
+                    tvFrequence.setText( String.valueOf(wifiInfo.getFrequency()));
+                    tvNetworkId.setText( String.valueOf(wifiInfo.getNetworkId()));
+
+                    for (final WifiConfiguration config : configuredWifis) {
+                        if (config.status == WifiConfiguration.Status.CURRENT) {
+                            switch (getSecurity(config)) {
+                                case SECURITY_PSK:
+                                    tvSecurity.setText("PSK");
+                                    break;
+                                case SECURITY_EAP:
+                                    tvSecurity.setText("EAP");
+                                    break;
+                                case SECURITY_WEP:
+                                    tvSecurity.setText("WEP");
+                                    break;
+                                case SECURITY_NONE:
+                                    tvSecurity.setText("NONE");
+                                    break;
+                            }
                         }
                     }
                 }
@@ -128,7 +139,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View view) {
-
+                Toast.makeText(getApplication(), "You can reconnect only networks created by own application.\nHere we don't have a create wifi sample.", Toast.LENGTH_LONG).show();
                 wifiManager.reconnect();
             }
         });
@@ -140,6 +151,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
+                Toast.makeText(getApplication(), "You can remove only networks created by own application.\nHere we don't have a create wifi sample.", Toast.LENGTH_LONG).show();
                 Toast.makeText(getApplication(), "getNetworkId = "+wifiInfo.getNetworkId()+" ;removeNetwork = "+ wifiManager.removeNetwork(wifiInfo.getNetworkId()), Toast.LENGTH_SHORT).show();
                 wifiManager.saveConfiguration();
             }
