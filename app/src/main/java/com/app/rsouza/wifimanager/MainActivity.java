@@ -25,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
     Button btnEnableNetwork;
     Button btnConnect;
     Button btnRemoveNetwork;
+    Button btnDisableWifi;
     TextView tvSSID;
     TextView tvSinalLevel;
     TextView tvSpeed;
@@ -49,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
         btnEnableNetwork  = (Button) findViewById(R.id.btnEnableNetwork);
         btnConnect = (Button) findViewById(R.id.btnConnect);
         btnRemoveNetwork = (Button) findViewById(R.id.btnRemoveNetwork);
+        btnDisableWifi = (Button) findViewById(R.id.btnDisableWifi);
 
         tvSSID = (TextView) findViewById(R.id.tvSSID);
         tvSinalLevel = (TextView) findViewById(R.id.tvSinalLevel);
@@ -75,9 +77,9 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View view) {
-                WifiManager wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
-                WifiInfo wifiInfo;
-                wifiInfo = wifiManager.getConnectionInfo();
+//                WifiManager wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+//                WifiInfo wifiInfo;
+//                wifiInfo = wifiManager.getConnectionInfo();
 
                 ConnectivityManager connManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
                 NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
@@ -154,6 +156,15 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(getApplication(), "You can remove only networks created by own application.\nHere we don't have a create wifi sample.", Toast.LENGTH_LONG).show();
                 Toast.makeText(getApplication(), "getNetworkId = "+wifiInfo.getNetworkId()+" ;removeNetwork = "+ wifiManager.removeNetwork(wifiInfo.getNetworkId()), Toast.LENGTH_SHORT).show();
                 wifiManager.saveConfiguration();
+            }
+        });
+
+        btnDisableWifi.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View view) {
+
+                wifiManager.setWifiEnabled(false);
             }
         });
     }

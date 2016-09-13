@@ -186,4 +186,12 @@
         android:layout_below="@+id/tvSecurity"
         android:layout_alignStart="@+id/tvSecurity"
         android:textStyle="bold" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Disable Wifi"
+        android:id="@+id/btnDisableWifi"
+        android:layout_below="@+id/btnRemoveNetwork"
+        android:layout_centerHorizontal="true" />
 </RelativeLayout>
